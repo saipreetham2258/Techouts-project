@@ -26,19 +26,23 @@ fun Application.apiRoute() {
                         log.info("Data fetched successfully")
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"No data found in DB")
+                        call.respond(HttpStatusCode.BadRequest,"No data found in DataBase")
                     }
+                }
+                else {
+                    call.respond(HttpStatusCode.OK,"Registration closed.")
                 }
 
             }
             catch (e : Exception) {
-                log.info("Exception occurred while getting data from db")
+                log.info("Exception occurred while getting data from DataBase")
                 call.respond(HttpStatusCode.BadRequest,"error : ${e.message}")
             }
         }
 
         post("/add-user") {
             try {
+                log.info("entered to add user")
                 val user = call.receive<RequestDto>()
 
                 if(user != null) {
@@ -59,20 +63,21 @@ fun Application.apiRoute() {
                                         )
                                         val userFromDb = getDataFromDb(user.empId)
                                         if(userFromDb != null) {
-                                            val result = RegisteredResponseDto("Employ registered successfully",userFromDb)
+                                            log.info("user registered successfully")
+                                            val result = RegisteredResponseDto("Employee registered successfully",userFromDb)
                                             call.respond(HttpStatusCode.OK, result)
                                         }
                                         else {
-                                            call.respond(HttpStatusCode.OK,"User not found in db")
+                                            call.respond(HttpStatusCode.OK,"User not found in DataBase")
                                         }
 
                                     }
                                     else {
-                                        call.respond(HttpStatusCode.BadRequest,"User Not added to DB")
+                                        call.respond(HttpStatusCode.BadRequest,"User Not added to DataBase")
                                     }
                                 }
                                 else {
-                                    call.respond(HttpStatusCode.BadRequest,"Error while mapping data to main dataDB")
+                                    call.respond(HttpStatusCode.BadRequest,"Error while mapping data to main DataBase")
                                 }
                             }
                             else {
@@ -80,11 +85,11 @@ fun Application.apiRoute() {
                             }
                         }
                         else {
-                            call.respond(HttpStatusCode.BadRequest,"User of employId : ${user.empId} is already selected the topics")
+                            call.respond(HttpStatusCode.BadRequest,"User of employeeId : ${user.empId} is already selected the topics")
                         }
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"User mailId and empId not matching with the data in employ DB, please provide valid details")
+                        call.respond(HttpStatusCode.BadRequest,"User mailId and empId not matching with the data in employee DB, please provide valid details")
                     }
 
                 }
@@ -102,14 +107,14 @@ fun Application.apiRoute() {
 
         get("/get-specific-user")  {
             try {
-                val userId = call.receive<userId>().toString()
+                val userId = call.request.headers["empId"]
                 if(userId != null) {
                     val userData = DataBaseConnection.mainUserCollection.findOne(UsersDataDto::empId eq userId.toInt())
                     if(userData != null) {
                         call.respond(HttpStatusCode.OK,userData)
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"User not found with empId $userData")
+                        call.respond(HttpStatusCode.BadRequest,"User not found with empId $userId")
                     }
                 }
                 else {
