@@ -26,17 +26,19 @@ fun Application.apiRoute() {
                         log.info("Data fetched successfully")
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"No data found in DataBase")
+                        log.info("No data found in DataBase")
+                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("No data found in DataBase"))
                     }
                 }
                 else {
-                    call.respond(HttpStatusCode.OK,"Registration closed.")
+                    log.info("Registration closed.")
+                    call.respond(HttpStatusCode.OK,ErroeMsgDto("Registration closed."))
                 }
 
             }
             catch (e : Exception) {
                 log.info("Exception occurred while getting data from DataBase")
-                call.respond(HttpStatusCode.BadRequest,"error : ${e.message}")
+                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("error : ${e.message}"))
             }
         }
 
@@ -68,37 +70,45 @@ fun Application.apiRoute() {
                                             call.respond(HttpStatusCode.OK, result)
                                         }
                                         else {
-                                            call.respond(HttpStatusCode.OK,"User not found in DataBase")
+                                            log.info("User not found in usersData DataBase")
+                                            call.respond(HttpStatusCode.OK,ErroeMsgDto("User not found in DataBase"))
                                         }
 
                                     }
                                     else {
-                                        call.respond(HttpStatusCode.BadRequest,"User Not added to DataBase")
+                                        log.info("User Not added to DataBase")
+                                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User Not added to DataBase"))
                                     }
                                 }
                                 else {
-                                    call.respond(HttpStatusCode.BadRequest,"Error while mapping data to main DataBase")
+                                    log.info("Error while mapping data to main DataBase")
+                                    call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Error while mapping data to main DataBase"))
                                 }
                             }
                             else {
-                                call.respond(HttpStatusCode.OK,"No Data Found in Db, All topics get selected")
+                                log.info("No Data Found in Db, All topics get selected")
+                                call.respond(HttpStatusCode.OK,ErroeMsgDto("No Data Found in Db, All topics get selected"))
                             }
                         }
                         else {
-                            call.respond(HttpStatusCode.BadRequest,"User of employeeId : ${user.empId} is already selected the topics")
+                            log.info("User of employeeId : ${user.empId} is already selected the topics")
+                            call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User of employeeId : ${user.empId} is already selected the topics"))
                         }
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"User mailId and empId not matching with the data in employee DB, please provide valid details")
+                        log.info("User mailId of ${user.empMailId} and empId of ${user.empId} not matching with the data in employee DB, please provide valid details")
+                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User mailId of ${user.empMailId} and empId of ${user.empId} not matching with the data in employee DB, please provide valid details"))
                     }
 
                 }
                 else {
-                    call.respond(HttpStatusCode.BadRequest,"Not Received Data from front end")
+                    log.info("Not Received Data from front end")
+                    call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Not Received Data from front end"))
                 }
             }
             catch (e : Exception) {
-                call.respond(HttpStatusCode.BadRequest,"Exception message : ${e.message}")
+                log.info("Exception message : ${e.message}")
+                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception message : ${e.message}"))
             }
 
 
@@ -114,15 +124,18 @@ fun Application.apiRoute() {
                         call.respond(HttpStatusCode.OK,userData)
                     }
                     else {
-                        call.respond(HttpStatusCode.BadRequest,"User not found with empId $userId")
+                        log.info("User not found with empId $userId")
+                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User not found with empId $userId"))
                     }
                 }
                 else {
-                    call.respond(HttpStatusCode.BadRequest,"Id not received from front end")
+                    log.info("Id not received from front end")
+                    call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Id not received from front end"))
                 }
             }
             catch (e : Exception) {
-                call.respond(HttpStatusCode.BadRequest,"Exception message : ${e.message}")
+                log.info("Exception message : ${e.message}")
+                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception message : ${e.message}"))
             }
 
         }
@@ -172,7 +185,7 @@ fun mapDataForMainDb(data : RequestDto) : UsersDataDto{
         topic?.subTopic
     }
 
-
+    log?.info("Data mapping done for response")
     return UsersDataDto(data.empId,
                         data.empName,
                         data.empMailId,
