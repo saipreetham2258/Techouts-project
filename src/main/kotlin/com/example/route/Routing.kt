@@ -44,7 +44,7 @@ fun Application.apiRoute() {
             try {
                 log.info("entered to add user")
                 val user = call.receive<RequestDto>()
-
+                log.info("${user.toString()}")
                 if(user != null) {
                     val userDetailsISPresentOrNot = checkingEmployeeDataInDb(user.empId,user.empMailId)
                     log.info("$userDetailsISPresentOrNot")
@@ -154,6 +154,7 @@ fun checkingEmployeeDataInDb(empId : Int , empMail : String) : Boolean {
     return false
 }
 fun checkingDataInMainDataDB(empId : Int , empMail: String) : Boolean {
+    log?.info("Details getting from front end request $empId and $empMail")
     val res =  DataBaseConnection.mainUserCollection.find(and(
         RequestDto::empId eq empId,
         RequestDto::empMailId eq empMail
