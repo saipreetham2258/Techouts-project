@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     implementation("org.litote.kmongo:kmongo:5.1.0")
+    implementation("io.ktor:ktor-server-cors-jvm:3.0.1")
     testImplementation("ch.qos.logback:logback-classic:1.5.12")
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.server.core)
