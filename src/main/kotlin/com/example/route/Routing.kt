@@ -53,8 +53,6 @@ fun Application.apiRoute() {
                     if(userDetailsISPresentOrNot) {
                         val userIsExistOrNot = checkingDataInMainDataDB(user.empId,user.empMailId)
                         if(!userIsExistOrNot) {
-                            val data = DataBaseConnection.topicsCollection.find().toList()
-                            if(data.isNotEmpty()) {
                                 val addUser = mapDataForMainDb(user)
                                 if(addUser != null) {
                                     val userAddedToDb = DataBaseConnection.mainUserCollection.insertOne(addUser)
@@ -84,20 +82,15 @@ fun Application.apiRoute() {
                                     log.info("Error while mapping data to main DataBase")
                                     call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Error while mapping data to main DataBase"))
                                 }
-                            }
-                            else {
-                                log.info("No Data Found in Db, All topics get selected")
-                                call.respond(HttpStatusCode.OK,ErroeMsgDto("No Data Found in Db, All topics get selected"))
-                            }
                         }
                         else {
-                            log.info("User of employeeId : ${user.empId} is already selected the topics")
-                            call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User of employeeId : ${user.empId} is already selected the topics"))
+                            log.info("User of employeeId : ${user.empId} is already exist")
+                            call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User already exists"))
                         }
                     }
                     else {
                         log.info("User mailId of ${user.empMailId} and empId of ${user.empId} not matching with the data in employee DB, please provide valid details")
-                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User mailId of ${user.empMailId} and empId of ${user.empId} not matching with the data in employee DB, please provide valid details"))
+                        call.respond(HttpStatusCode.Unauthorized,ErroeMsgDto("Please enter valid details"))
                     }
 
                 }
@@ -126,7 +119,7 @@ fun Application.apiRoute() {
                     log.info("Users fetched successfully")
                     call.respond(HttpStatusCode.OK, usersData)
                 } ?: run {
-                    call.respond(HttpStatusCode.OK, ErroeMsgDto("No users have selected topics."))
+                    call.respond(HttpStatusCode.NotFound, ErroeMsgDto("No users have selected topics."))
                 }
 
             }
