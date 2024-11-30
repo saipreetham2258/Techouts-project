@@ -115,6 +115,24 @@ fun Application.apiRoute() {
 
         }
 
+        get("/selected-users") {
+            try {
+                log.info("getting selected users")
+                val data : List<UsersDataDto>? = DataBaseConnection.mainUserCollection.find().toList()
+                data?.let {
+                    val usersData = data.map { res -> UserResponseDto(res.empId,res.empName,res.topicsSelected) }
+                    log.info("users fetched successfully")
+                    call.respond(HttpStatusCode.OK,usersData)
+                } ?: run {
+                    call.respond(HttpStatusCode.OK,ErroeMsgDto("No users have selected topics."))
+                }
+            }
+            catch (e : Exception) {
+                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception : ${e.message}"))
+            }
+
+        }
+
         get("/get-specific-user")  {
             try {
                 val userId = call.request.headers["empId"]
@@ -196,7 +214,7 @@ fun getDataFromDb(empId : Int) : UserResponseDto? {
     if(empId != null) {
         val userData = DataBaseConnection.mainUserCollection.findOne(UsersDataDto::empId eq empId)
         if (userData != null) {
-            return UserResponseDto(userData.empId,userData.topicsSelected)
+            return UserResponseDto(userData.empId,userData.empName,userData.topicsSelected)
         }
         return null
     }

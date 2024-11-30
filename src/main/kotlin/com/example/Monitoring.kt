@@ -1,5 +1,6 @@
 package com.example
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.cors.routing.*
@@ -15,6 +16,7 @@ fun Application.configureMonitoring() {
     }
     install(CORS) {
         anyHost()
+        allowHeader(HttpHeaders.ContentType)
     }
 
 }
