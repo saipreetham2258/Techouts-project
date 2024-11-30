@@ -32,7 +32,7 @@ fun Application.apiRoute() {
                 }
                 else {
                     log.info("Registration closed.")
-                    call.respond(HttpStatusCode.OK,ErroeMsgDto("Registration closed."))
+                    call.respond(HttpStatusCode.NotFound,ErroeMsgDto("Registration closed."))
                 }
 
             }
