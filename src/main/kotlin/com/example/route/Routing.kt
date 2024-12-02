@@ -38,7 +38,7 @@ fun Application.apiRoute() {
             }
             catch (e : Exception) {
                 log.info("Exception occurred while getting data from DataBase")
-                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("error : ${e.message}"))
+                call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("error : ${e.message}"))
             }
         }
 
@@ -69,18 +69,18 @@ fun Application.apiRoute() {
                                         }
                                         else {
                                             log.info("User not found in usersData DataBase")
-                                            call.respond(HttpStatusCode.OK,ErroeMsgDto("User not found in DataBase"))
+                                            call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("User not found in DataBase"))
                                         }
 
                                     }
                                     else {
                                         log.info("User Not added to DataBase")
-                                        call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("User Not added to DataBase"))
+                                        call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("User Not added to DataBase"))
                                     }
                                 }
                                 else {
                                     log.info("Error while mapping data to main DataBase")
-                                    call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Error while mapping data to main DataBase"))
+                                    call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("Error while mapping data to main DataBase"))
                                 }
                         }
                         else {
@@ -96,12 +96,12 @@ fun Application.apiRoute() {
                 }
                 else {
                     log.info("Not Received Data from front end")
-                    call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Not Received Data from front end"))
+                    call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("Not Received Data from front end"))
                 }
             }
             catch (e : Exception) {
                 log.info("Exception message : ${e.message}")
-                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception message : ${e.message}"))
+                call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("Exception message : ${e.message}"))
             }
 
 
@@ -124,7 +124,7 @@ fun Application.apiRoute() {
 
             }
             catch (e : Exception) {
-                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception : ${e.message}"))
+                call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("Exception : ${e.message}"))
             }
 
         }
@@ -149,7 +149,7 @@ fun Application.apiRoute() {
             }
             catch (e : Exception) {
                 log.info("Exception message : ${e.message}")
-                call.respond(HttpStatusCode.BadRequest,ErroeMsgDto("Exception message : ${e.message}"))
+                call.respond(HttpStatusCode.InternalServerError,ErroeMsgDto("Exception message : ${e.message}"))
             }
 
         }
